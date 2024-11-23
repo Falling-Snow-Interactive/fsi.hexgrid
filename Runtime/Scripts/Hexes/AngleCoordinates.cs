@@ -1,6 +1,6 @@
 using System;
 
-namespace fsi.hexgrid.Hexes
+namespace Fsi.HexGrid.Hexes
 {
     [Serializable]
     public class AngleCoordinates
@@ -28,10 +28,17 @@ namespace fsi.hexgrid.Hexes
         
         public override bool Equals(object obj)
         {
-            if (obj is null) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
-            return Equals((AngleCoordinates)obj);
+            if (obj is null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            
+            return obj.GetType() == GetType() && Equals((AngleCoordinates)obj);
         }
         
         public override int GetHashCode()

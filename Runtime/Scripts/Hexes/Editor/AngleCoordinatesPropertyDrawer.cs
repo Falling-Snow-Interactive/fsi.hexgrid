@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine.UIElements;
 
-namespace fsi.hexgrid.Hexes.Editor
+namespace Fsi.HexGrid.Hexes.Editor
 {
     [CustomPropertyDrawer(typeof(AngleCoordinates))]
     public class AngleCoordinatesPropertyDrawer : PropertyDrawer

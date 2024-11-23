@@ -1,27 +1,30 @@
+using System;
 using System.Collections.Generic;
-using fsi.hexgrid.Hexes;
+using Fsi.HexGrid.Hexes;
 using UnityEngine;
 
-namespace fsi.hexgrid.Pathfinding
+namespace Fsi.HexGrid.Pathfinding
 {
-    public static class BreathFirstSearch
+    public static class BreathFirstSearch<THex, TState>
+        where THex : Hex<TState>, new()
+        where TState : Enum
     {
-        public static bool TryGetPath(HexGrid hexGrid, Hex start, Hex end, out List<Hex> path)
+        public static bool TryGetPath(HexGrid<THex, TState> hexGrid, THex start, THex end, List<TState> unwalkable, out List<THex> path)
         {
-            path = new List<Hex>();
-            Dictionary<Hex,Hex> cameFrom = new();
+            path = new List<THex>();
+            Dictionary<THex,THex> cameFrom = new();
             
-            var frontier = new Queue<Hex>();
+            var frontier = new Queue<THex>();
             frontier.Enqueue(start);
 
-            var reached = new HashSet<Hex> { start };
+            var reached = new HashSet<THex> { start };
 
             while (frontier.Count > 0)
             {
                 var current = frontier.Dequeue();
                 foreach (var next in hexGrid.GetNeighbors(current))
                 {
-                    if (!reached.Contains(next) && current.state == Hex.HexState.Walkable) 
+                    if (!reached.Contains(next) && !unwalkable.Contains(current.state)) 
                     {
                         frontier.Enqueue(next);
                         reached.Add(next);
@@ -30,7 +33,7 @@ namespace fsi.hexgrid.Pathfinding
                 }
             }
 
-            Hex curr = end;
+            THex curr = end;
             while (!curr.Equals(start))
             {
                 path.Insert(0, curr);

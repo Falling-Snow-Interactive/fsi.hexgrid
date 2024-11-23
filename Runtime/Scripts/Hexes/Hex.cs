@@ -1,37 +1,36 @@
 using System;
 using UnityEngine;
-using UnityEngine.Serialization;
 
-namespace fsi.hexgrid.Hexes
+namespace Fsi.HexGrid.Hexes
 {
     [Serializable]
-    public class Hex : ISerializationCallbackReceiver
+    public class Hex<TState> : ISerializationCallbackReceiver
+    where TState : Enum
     {
         [HideInInspector]
         [SerializeField]
         private string name;
         
-        [FormerlySerializedAs("coordinates")]
-        public AngleCoordinates coordinateses;
-        public HexState state = HexState.Walkable;
-
-        public enum HexState
-        {
-            None = 0,
-            Walkable = 1,
-            Tower = 2
-        }
+        [HideInInspector]
+        public AngleCoordinates coordinates;
+        
+        public TState state;
         
         public Hex(int q, int r)
         {
-            coordinateses = new AngleCoordinates(q, r);
+            coordinates = new AngleCoordinates(q, r);
         }
-        
+
+        protected Hex()
+        {
+            coordinates = new AngleCoordinates(0, 0);
+        }
+
         #region Operators
 
-        private bool Equals(Hex other)
+        private bool Equals(Hex<TState> other)
         {
-            return Equals(coordinateses, other.coordinateses);
+            return Equals(coordinates, other.coordinates);
         }
         
         public override bool Equals(object obj)
@@ -39,24 +38,24 @@ namespace fsi.hexgrid.Hexes
             if (obj is null) return false;
             if (ReferenceEquals(this, obj)) return true;
             if (obj.GetType() != GetType()) return false;
-            return Equals((Hex)obj);
+            return Equals((Hex<TState>)obj);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(coordinateses);
+            return HashCode.Combine(coordinates);
         }
 
         public new string ToString()
         {
-            return $"Hex: \n\t{coordinateses}";
+            return $"Hex: \n\t{coordinates}";
         }
         
         #endregion
 
         public void OnBeforeSerialize()
         {
-            name = $"{coordinateses} - {state}";
+            name = $"{coordinates} - {state}";
         }
 
         public void OnAfterDeserialize() { }

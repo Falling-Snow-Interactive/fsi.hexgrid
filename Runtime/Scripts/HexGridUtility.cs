@@ -1,8 +1,8 @@
 using System.Collections.Generic;
-using fsi.hexgrid.Hexes;
+using Fsi.HexGrid.Hexes;
 using UnityEngine;
 
-namespace fsi.hexgrid
+namespace Fsi.HexGrid
 {
     public static class HexGridUtility
     {
@@ -28,9 +28,9 @@ namespace fsi.hexgrid
             return GetHeight(size);
         }
         
-        public static Vector3 GetCornerPosition(Vector3 center, float size, int index, Orientation orientation)
+        public static Vector3 GetCornerPosition(Vector3 center, float size, int index, Orientation.OrientationType orientation)
         {
-            float deg = orientation == Orientation.Flat ? 60f * index : 60f * index + 30f;
+            float deg = orientation == Orientation.OrientationType.Flat ? 60f * index : 60f * index + 30f;
             float rad = deg * Mathf.Deg2Rad;
             return new Vector3(center.x + size * Mathf.Cos(rad),
                                0,
@@ -49,7 +49,7 @@ namespace fsi.hexgrid
         
         #if UNITY_EDITOR
         
-        public static void DrawHexGizmos(Vector3 center, float size, Orientation orientation, Color color)
+        public static void DrawHexGizmos(Vector3 center, float size, Orientation.OrientationType orientation, Color color)
         {
             List<Vector3> corners = new();
             for (int i = 0; i < NumberOfSides; i++)

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace fsi.hexgrid.Hexes
+namespace Fsi.HexGrid.Hexes
 {
     public class Orientation
     {
@@ -33,38 +33,35 @@ namespace fsi.hexgrid.Hexes
             this.B3 = b3;
             this.StartAngle = start_angle;
         }
+
+        private static readonly Orientation Pointy = new(Mathf.Sqrt(3f),
+                                                         Mathf.Sqrt(3f) / 2f,
+                                                         0f,
+                                                         3f / 2f, 
+                                                         Mathf.Sqrt(3f) / 3f, 
+                                                         -1f / 3f, 
+                                                         0f, 
+                                                         2f / 3f, 
+                                                         0.5f);
         
-        public static Orientation Pointy = new(Mathf.Sqrt(3f),
-                                               Mathf.Sqrt(3f) / 2f,
-                                               0f,
-                                               3f / 2f, 
-                                               Mathf.Sqrt(3f) / 3f, 
-                                               -1f / 3f, 
-                                               0f, 
-                                               2f / 3f, 
-                                               0.5f);
-        
-        public static Orientation Flat = new(3f / 2f, 
-                                             0f, 
-                                             Mathf.Sqrt(3f) / 2f, 
-                                             Mathf.Sqrt(3f), 
-                                             2f / 3f, 
-                                             0f, 
-                                             -1f / 3f, 
-                                             Mathf.Sqrt(3f) / 3f, 
-                                             0f);
+        private static readonly Orientation Flat = new(3f / 2f, 
+                                                      0f, 
+                                                      Mathf.Sqrt(3f) / 2f, 
+                                                      Mathf.Sqrt(3f), 
+                                                      2f / 3f, 
+                                                      0f, 
+                                                      -1f / 3f, 
+                                                      Mathf.Sqrt(3f) / 3f, 
+                                                      0f);
 
         public static Orientation GetOrientation(OrientationType type)
         {
-            switch (type)
-            {
-                case OrientationType.Flat:
-                    return Flat;
-                case OrientationType.Pointy:
-                    return Pointy;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, null);
-            }
+            return type switch
+                   {
+                       OrientationType.Flat => Flat,
+                       OrientationType.Pointy => Pointy,
+                       _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
+                   };
         }
     }
 }

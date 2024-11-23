@@ -1,19 +1,21 @@
 using System;
 using System.Collections.Generic;
-using fsi.hexgrid.Hexes;
+using Fsi.HexGrid.Hexes;
 using UnityEngine;
 
-namespace fsi.hexgrid
+namespace Fsi.HexGrid
 {
     [Serializable]
-    public class HexGrid
+    public class HexGrid<THex, TState> 
+        where THex : Hex<TState>, new()
+        where TState : Enum
     {
         public int size;
-        public List<Hex> hexes;
+        public List<THex> hexes;
         
         public void Reset()
         {
-            hexes = new List<Hex>();
+            hexes = new List<THex>();
             for(int q = -size + 1; q < size; q++)
                 for (int r = -size + 1; r < size; r++)
                 {
@@ -24,14 +26,21 @@ namespace fsi.hexgrid
                         continue;
                     }
                     
-                    Hex hex = new Hex(q, r);
+                    THex hex = new THex
+                               {
+                                   coordinates =
+                                   {
+                                       q = q,
+                                       r = r,
+                                   }
+                               };
                     hexes.Add(hex);
                 }
         }
 
         public void Refresh()
         {
-            List<Hex> refreshed = new();
+            List<THex> refreshed = new();
             
             for(int q = -size + 1; q < size; q++)
                 for (int r = -size + 1; r < size; r++)
@@ -43,9 +52,16 @@ namespace fsi.hexgrid
                         continue;
                     }
 
-                    if (!TryGetHex(q, r, out Hex hex))
+                    if (!TryGetHex(q, r, out THex hex))
                     {
-                        hex = new Hex(q, r);
+                        hex = new THex
+                                  {
+                                      coordinates =
+                                      {
+                                          q = q,
+                                          r = r,
+                                      }
+                                  };
                     }
                     
                     refreshed.Add(hex);
@@ -54,11 +70,11 @@ namespace fsi.hexgrid
             hexes = refreshed;
         }
 
-        public bool TryGetHex(int q, int r, out Hex hex)
+        public bool TryGetHex(int q, int r, out THex hex)
         {
-            foreach (Hex h in hexes)
+            foreach (THex h in hexes)
             {
-                if (h.coordinateses.q == q && h.coordinateses.r == r)
+                if (h.coordinates.q == q && h.coordinates.r == r)
                 {
                     hex = h;
                     return true;
@@ -69,18 +85,18 @@ namespace fsi.hexgrid
             return false;
         }
 
-        public bool TryGetHex(AngleCoordinates coordinates, out Hex hex)
+        public bool TryGetHex(AngleCoordinates coordinates, out THex hex)
         {
             return TryGetHex(coordinates.q, coordinates.r, out hex);
         }
 
-        public List<Hex> GetNeighbors(Hex hex)
+        public List<THex> GetNeighbors(THex hex)
         {
-            List<Hex> neighbors = new();
+            List<THex> neighbors = new();
 
             foreach (AngleCoordinates direction in HexGridUtility.Directions)
             {
-                AngleCoordinates n = hex.coordinateses.Add(direction);
+                AngleCoordinates n = hex.coordinates.Add(direction);
                 if (Mathf.Abs(n.q) > size
                     || Mathf.Abs(n.r) > size
                     || Mathf.Abs(n.s) > size)
@@ -88,7 +104,7 @@ namespace fsi.hexgrid
                     continue;
                 }
                 
-                if (TryGetHex(n.q, n.r, out Hex h))
+                if (TryGetHex(n.q, n.r, out THex h))
                 {
                     neighbors.Add(h);
                 }

@@ -1,6 +1,6 @@
 {
     "name": "FsiHexGrid",
-    "rootNamespace": "fsi.hexgrid",
+    "rootNamespace": "Fsi.HexGrid",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
