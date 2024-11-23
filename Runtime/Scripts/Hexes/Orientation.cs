@@ -5,12 +5,6 @@ namespace Fsi.HexGrid.Hexes
 {
     public class Orientation
     {
-        public enum OrientationType
-        {
-            Flat,
-            Pointy,
-        }
-        
         public float F0 { get; }
         public float F1 { get; }
         public float F2 { get; }

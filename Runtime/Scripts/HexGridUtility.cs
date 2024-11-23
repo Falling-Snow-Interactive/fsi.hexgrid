@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Fsi.HexGrid.Hexes;
+using UnityEditor;
 using UnityEngine;
 
 namespace Fsi.HexGrid
@@ -28,9 +29,9 @@ namespace Fsi.HexGrid
             return GetHeight(size);
         }
         
-        public static Vector3 GetCornerPosition(Vector3 center, float size, int index, Orientation.OrientationType orientation)
+        public static Vector3 GetCornerPosition(Vector3 center, float size, int index, OrientationType orientation)
         {
-            float deg = orientation == Orientation.OrientationType.Flat ? 60f * index : 60f * index + 30f;
+            float deg = orientation == OrientationType.Flat ? 60f * index : 60f * index + 30f;
             float rad = deg * Mathf.Deg2Rad;
             return new Vector3(center.x + size * Mathf.Cos(rad),
                                0,
@@ -49,7 +50,22 @@ namespace Fsi.HexGrid
         
         #if UNITY_EDITOR
         
-        public static void DrawHexGizmos(Vector3 center, float size, Orientation.OrientationType orientation, Color color)
+        public static void DrawHexHandles(Vector3 center, float size, float thickness, OrientationType orientation)
+        {
+            for (int i = 0; i < NumberOfSides - 1; i++)
+            {
+                Vector3 c0 = GetCornerPosition(center, size, i, orientation);
+                Vector3 c1 = GetCornerPosition(center, size, i + 1, orientation);
+                
+                Handles.DrawLine(c0, c1, thickness);
+            }
+
+            Handles.DrawLine(GetCornerPosition(center, size, 0, orientation),
+                             GetCornerPosition(center, size, NumberOfSides - 1, orientation),
+                             thickness);
+        }
+        
+        public static void DrawHexGizmos(Vector3 center, float size, OrientationType orientation)
         {
             List<Vector3> corners = new();
             for (int i = 0; i < NumberOfSides; i++)
@@ -58,7 +74,6 @@ namespace Fsi.HexGrid
                 corners.Add(c);
             }
 
-            Gizmos.color = color;
             Gizmos.DrawLineStrip(corners.ToArray(), true);
         }
         
