@@ -9,7 +9,7 @@ namespace Fsi.HexGrid.Pathfinding
         where THex : Hex<TState>, new()
         where TState : Enum
     {
-        public static bool TryGetPath(HexGrid<THex, TState> hexGrid, THex start, THex end, List<TState> unwalkable, out List<THex> path)
+        public static bool TryGetPath(HexGrid<THex, TState> hexGrid, THex start, THex end, List<TState> pathable, out List<THex> path)
         {
             path = new List<THex>();
             Dictionary<THex,THex> cameFrom = new();
@@ -24,7 +24,7 @@ namespace Fsi.HexGrid.Pathfinding
                 var current = frontier.Dequeue();
                 foreach (var next in hexGrid.GetNeighbors(current))
                 {
-                    if (!reached.Contains(next) && !unwalkable.Contains(current.state)) 
+                    if (!reached.Contains(next) && pathable.Contains(current.state)) 
                     {
                         frontier.Enqueue(next);
                         reached.Add(next);
@@ -50,7 +50,6 @@ namespace Fsi.HexGrid.Pathfinding
             }
 
             path.Insert(0, start);
-            path.Reverse();
             return path.Count > 0;
         }
     }
