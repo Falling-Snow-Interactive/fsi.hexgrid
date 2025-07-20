@@ -94,7 +94,7 @@ namespace Fsi.HexGrid
         {
             List<THex> neighbors = new();
 
-            foreach (AngleCoordinates direction in HexGridUtility.Directions)
+            foreach (AngleCoordinates direction in HexGridUtility.directions)
             {
                 AngleCoordinates n = hex.coordinates.Add(direction);
                 if (Mathf.Abs(n.q) > size

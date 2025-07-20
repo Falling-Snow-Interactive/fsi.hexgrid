@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Fsi.HexGrid.Hexes
 {
@@ -15,6 +16,8 @@ namespace Fsi.HexGrid.Hexes
         public AngleCoordinates coordinates;
         
         public TState state;
+
+        public bool pathable = true;
         
         public Hex(int q, int r)
         {
@@ -35,10 +38,17 @@ namespace Fsi.HexGrid.Hexes
         
         public override bool Equals(object obj)
         {
-            if (obj is null) return false;
-            if (ReferenceEquals(this, obj)) return true;
-            if (obj.GetType() != GetType()) return false;
-            return Equals((Hex<TState>)obj);
+            if (obj is null)
+            {
+                return false;
+            }
+            
+            if (ReferenceEquals(this, obj))
+            {
+                return true;
+            }
+            
+            return obj.GetType() == GetType() && Equals((Hex<TState>)obj);
         }
 
         public override int GetHashCode()

@@ -7,7 +7,7 @@ namespace Fsi.HexGrid
 {
     public static class HexGridUtility
     {
-        public const int NumberOfSides = 6;
+        private const int NUMBER_OF_SIDES = 6;
         
         public static float GetWidth(float size)
         {
@@ -38,7 +38,7 @@ namespace Fsi.HexGrid
                                center.z + size * Mathf.Sin(rad));
         }
         
-        public static readonly List<AngleCoordinates> Directions = new List<AngleCoordinates>
+        public static readonly List<AngleCoordinates> directions = new List<AngleCoordinates>
                                                                   {
                                                                       new(1, 0),
                                                                       new(1, -1),
@@ -52,7 +52,7 @@ namespace Fsi.HexGrid
         
         public static void DrawHexHandles(Vector3 center, float size, float thickness, OrientationType orientation)
         {
-            for (int i = 0; i < NumberOfSides - 1; i++)
+            for (int i = 0; i < NUMBER_OF_SIDES - 1; i++)
             {
                 Vector3 c0 = GetCornerPosition(center, size, i, orientation);
                 Vector3 c1 = GetCornerPosition(center, size, i + 1, orientation);
@@ -61,14 +61,14 @@ namespace Fsi.HexGrid
             }
 
             Handles.DrawLine(GetCornerPosition(center, size, 0, orientation),
-                             GetCornerPosition(center, size, NumberOfSides - 1, orientation),
+                             GetCornerPosition(center, size, NUMBER_OF_SIDES - 1, orientation),
                              thickness);
         }
         
         public static void DrawHexGizmos(Vector3 center, float size, OrientationType orientation)
         {
             List<Vector3> corners = new();
-            for (int i = 0; i < NumberOfSides; i++)
+            for (int i = 0; i < NUMBER_OF_SIDES; i++)
             {
                 Vector3 c = GetCornerPosition(center, size, i, orientation);
                 corners.Add(c);
